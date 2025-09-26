@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-#from calculation import calculate_sand_production
+from fieldGroup import FIELD_GROUPS  
 
 
 class SandProductionGUI:
@@ -46,60 +46,9 @@ class SandProductionGUI:
         self.inputs_tab.rowconfigure(0, weight=1)
         self.inputs_tab.columnconfigure(0, weight=1)
 
-        # Dictionary of grouped fields with units
-        groups = {
-            "Initial Stresses": {
-                "Vertical Stress": "Psi",
-                "Maximum Horizontal Stress": "Psi",
-                "Minimum Horizontal Stress": "Psi"
-            },
-            "Reservoir Pressures": {
-                "Initial Reservoir Pressure": "Psi",
-                "Current Reservoir Pressure": "Psi",
-                "Wellbore Pressure": "Psi"
-            },
-            "Rock Properties": {
-                "Failure Angle": "Degree",
-                "UCS": "Psi"
-            },
-            "Time Settings": {
-                "Time Step": "Second",
-                "Until": "Dimensionless"
-            },
-            "Well Orientation": {
-                "Inclination": "Degree",
-                "Azimuth": "Degree"
-            },
-            "Elastic Properties": {
-                "Poroelastic Constant": "Dimensionless",
-                "Poisson Ratio": "Dimensionless"
-            },
-            "Porosity": {
-                "Porosity": "Fraction",
-                "Critical Porosity": "Fraction"
-            },
-            "Permeability": {
-                "Permeability": "Darcy",
-                "Sand Production Coefficient": "Sec/m³"
-            },
-            "Critical Pressures": {
-                "Critical Reservoir Pressure": "Psi",
-                "Critical Well Pressure": "Psi"
-            },
-            "Geometry": {
-                "Wellbore Radius": "ft",
-                "External Radius": "ft",
-                "Reservoir Thickness": "ft",
-                "Solid Density": "Kg/m³"
-            },
-            "Other Parameters": {
-                "Viscosity": "cP",
-                "COPR": "Dimensionless",
-                "ISP": "Kg",
-                "Failure Method": "-"
-            },
-        }
-
+        #import Fields
+        groups = FIELD_GROUPS
+        
         self.entries = {}
 
         # Place groups in 3 columns per row
