@@ -21,11 +21,11 @@ FIELD_GROUPS = {
         "until": "Until (Dimensionless)"
     },
     "Well Orientation": {
-        "inclination": "Inclination (Degree)",
-        "azimuth": "Azimuth (Degree)"
+        "i": "Inclination (Degree)",
+        "alpha": "Azimuth (Degree)"
     },
     "Elastic Properties": {
-        "alpha": "Poroelastic Constant (Dimensionless)",
+        "alphap": "Poroelastic Constant (Dimensionless)",
         "nu": "Poisson Ratio (Dimensionless)"
     },
     "Porosity": {
@@ -85,4 +85,5 @@ def validate_parameter_value(short_name, value):
         return False, f"{short_name} should be positive"
 
     return True, "Valid"
+
 
