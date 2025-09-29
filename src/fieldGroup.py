@@ -1,68 +1,88 @@
-#Field to use 
+# -----------------------------
+# Parameter Definitions
+# -----------------------------
 FIELD_GROUPS = {
     "Initial Stresses": {
-        "Vertical Stress": "Psi",
-        "Maximum Horizontal Stress": "Psi",
-        "Minimum Horizontal Stress": "Psi"
+        "sigma_v": "Vertical Stress (Psi)",
+        "sigma_H": "Maximum Horizontal Stress (Psi)",
+        "sigma_h": "Minimum Horizontal Stress (Psi)"
     },
     "Reservoir Pressures": {
-        "Initial Reservoir Pressure": "Psi",
-        "Current Reservoir Pressure": "Psi",
-        "Wellbore Pressure": "Psi"
+        "p_i": "Initial Reservoir Pressure (Psi)",
+        "p_res": "Current Reservoir Pressure (Psi)",
+        "p_well": "Wellbore Pressure (Psi)"
     },
     "Rock Properties": {
-        "Failure Angle": "Degree",
-        "UCS": "Psi"
+        "theta": "Failure Angle (Degree)",
+        "UCS": "UCS (Psi)"
     },
     "Time Settings": {
-        "Time Step": "Second",
-        "Until": "Dimensionless"
+        "time_step": "Time Step (Second)",
+        "until": "Until (Dimensionless)"
     },
     "Well Orientation": {
-        "Inclination": "Degree",
-        "Azimuth": "Degree"
+        "inclination": "Inclination (Degree)",
+        "azimuth": "Azimuth (Degree)"
     },
     "Elastic Properties": {
-        "Poroelastic Constant": "Dimensionless",
-        "Poisson Ratio": "Dimensionless"
+        "alpha": "Poroelastic Constant (Dimensionless)",
+        "nu": "Poisson Ratio (Dimensionless)"
     },
     "Porosity": {
-        "Porosity": "Fraction",
-        "Critical Porosity": "Fraction"
+        "phi": "Porosity(Fraction)",
+        "phi_c": "Critical Porosity (Fraction)"
     },
     "Permeability": {
-        "Permeability": "Darcy",
-        "Sand Production Coefficient": "Sec/m³"
+        "k": "Permeability (Darcy)",
+        "beta": "Sand Production Coefficient (Sec/m³)"
     },
     "Critical Pressures": {
-        "Critical Reservoir Pressure": "Psi",
-        "Critical Well Pressure": "Psi"
+        "p_crit_res": "Critical Reservoir Pressure (Psi)",
+        "p_crit_well": "Critical Well Pressure (Psi)"
     },
     "Geometry": {
-        "Wellbore Radius": "ft",
-        "External Radius": "ft",
-        "Reservoir Thickness": "ft",
-        "Solid Density": "Kg/m³"
+        "r_well": "Wellbore Radius (ft)",
+        "r_ext": "External Radius (ft)",
+        "h_res": "Reservoir Thickness (ft)",
+        "rho_s": "Solid Density (Kg/m³)"
     },
     "Other Parameters": {
-        "Viscosity": "cP",
-        "COPR": "Dimensionless",
-        "ISP": "Kg",
-        "Failure Method": "-"
-    },
+        "mu": "Viscosity (cP)",
+        "COPR": "COPR (Dimensionless)",
+        "ISP": "ISP (Kg)",
+        "Failure Method": "Failure Method"
+    }
 }
 
-# You can also add helper functions
-def get_all_field_names():
-    """Return a flat list of all field names"""
-    all_fields = []
-    for group in FIELD_GROUPS.values():
-        all_fields.extend(group.keys())
-    return all_fields
+# -----------------------------
+# Utility Functions
+# -----------------------------
+def get_parameter(short_name):
+    """Return the full field name for a short parameter name"""
+    return FIELD_GROUPS.get(short_name, {}).get("full_name")
 
-def get_field_unit(field_name):
-    """Get the unit for a specific field"""
-    for group in FIELD_GROUPS.values():
-        if field_name in group:
-            return group[field_name]
-    return None
+def get_parameter_unit(short_name):
+    """Return the unit for a short parameter name"""
+    return FIELD_GROUPS.get(short_name, {}).get("unit")
+
+def get_parameter_info(short_name):
+    """Return complete info (dict) for a parameter"""
+    return FIELD_GROUPS.get(short_name)
+
+def get_all_short_names():
+    """Return all available short parameter names"""
+    return list(FIELD_GROUPS.keys())
+
+def validate_parameter_value(short_name, value):
+    """Basic validation based on parameter type"""
+    unit = get_parameter_unit(short_name)
+
+    if unit == "Fraction" and not (0 <= value <= 1):
+        return False, f"{short_name} should be between 0 and 1"
+    elif unit == "Degree" and not (0 <= value <= 360):
+        return False, f"{short_name} should be between 0 and 360 degrees"
+    elif unit in ["Psi", "ft", "Kg/m³"] and value < 0:
+        return False, f"{short_name} should be positive"
+
+    return True, "Valid"
+
